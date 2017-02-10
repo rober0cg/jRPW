@@ -1,6 +1,6 @@
-package sr.jRPW.processor;
+package rpw.processor;
 
-import sr.jRPW.common.BatchException;
+import rpw.common.BatchException;
 
 public interface BatchProcessor {
     // inicialización: argumentos en función del procesador, campos de entrada y campos de salida

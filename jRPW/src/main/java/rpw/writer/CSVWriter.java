@@ -1,8 +1,8 @@
-package sr.jRPW.writer;
+package rpw.writer;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
+import rpw.common.BatchException;
 
 
 /* 
@@ -63,10 +63,12 @@ public class CSVWriter extends FILEWriter implements BatchWriter {
     private String quoteStringCSV(String val) {
         String csv="";
         if ( val!=null ) {
-            if ( val.indexOf(',')!=-1 || val.indexOf(' ')!=-1 || val.indexOf('\\')!=-1 )
+            if ( val.indexOf(',')!=-1 || val.indexOf(' ')!=-1 || val.indexOf('\\')!=-1 ) {
                 csv="\"" + val + "\"";
-            else
+            }
+            else {
                 csv=val;
+            }
         }
         return csv;
     }

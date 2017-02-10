@@ -1,12 +1,12 @@
 /**
  * 
  */
-package sr.jRPW.reader;
+package rpw.reader;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
-import sr.jRPW.common.JDBCCommon;
+import rpw.common.BatchException;
+import rpw.common.JDBCCommon;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +29,7 @@ public class JDBCReader extends JDBCCommon implements BatchReader {
     int rn=0; // RecNum
 
     public JDBCReader(String[] args, String[] flds) throws BatchException {
+        super(args[0], args[1], args[2], args[3]);
         open(args, flds);
     }
 
@@ -38,8 +39,6 @@ public class JDBCReader extends JDBCCommon implements BatchReader {
     @Override
     public int open(String[] args, String[] flds) throws BatchException {
         LOG.trace("JDBCReader.openBR");
-
-        super.open(args[0], args[1], args[2], args[3]);
 
         // preparar la query
         sSQL=args[4];
@@ -89,12 +88,7 @@ public class JDBCReader extends JDBCCommon implements BatchReader {
     @Override
     public void close() throws BatchException {
         LOG.trace("JDBCReader.closeBR");
-
         super.close();
-        nf=0;
-        fs=null;
-        rn=0;
-        
         return;
     }
 

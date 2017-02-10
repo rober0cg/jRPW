@@ -1,9 +1,9 @@
-package sr.jRPW.reader;
+package rpw.reader;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
-import sr.jRPW.common.FLVCommon;
+import rpw.common.BatchException;
+import rpw.common.FLVCommon;
 
 
 /* 
@@ -50,31 +50,20 @@ public class FLVReader extends FILEReader implements BatchReader {
             return -1;
         }
 
-        int d=0, h=0; // desde y hasta
+        int d=0; // desde y ...
+        int h;   // ... hasta
         for ( int i=0; i<nf; i++) {
             if ( d<ln.length() ) {
                 h = d + fl[i]; // hasta le sumo el ancho del campo
                 vals[i] = ln.substring(d, h).trim();
                 d = h; // el proximo desde es el hasta actual
             }
-            else
+            else {
                 vals[i] = "";
+            }
         }
         rn++;
-
         return 0;
-    }
-
-    @Override
-    public void close() throws BatchException {
-        LOG.trace("FLVReader.closeBR");
-
-        super.close();
-        fs=null;
-        fl=null;
-        rn=0;
-        
-        return;
     }
 
     @Override

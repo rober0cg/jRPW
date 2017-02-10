@@ -1,8 +1,8 @@
-package sr.jRPW.reader;
+package rpw.reader;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
+import rpw.common.BatchException;
 
 
 public class CSVReader extends FILEReader implements BatchReader {
@@ -44,23 +44,10 @@ public class CSVReader extends FILEReader implements BatchReader {
             vals[i]=i<tk.length ? tk[i] : "";
         }
         rn++;
-        
         return 0;
     }
 
     @Override
-    public void close() throws BatchException {
-        LOG.trace("CSVReader.closeBR");
-
-        super.close();
-        fn=null;
-        fs=null;
-        rn=0;
-        
-        return;
-    }
-
-  @Override
     public int getNumInFields(){
         return nf;
     }

@@ -1,4 +1,4 @@
-package sr.jRPW.common;
+package rpw.common;
 
 import org.apache.log4j.Logger;
 
@@ -34,12 +34,12 @@ public class EquivIO {
 
         String tokSep = "[,-]";
         try {
-        for (int i=0; i<nEquiv; i++){
-            String[] pareja = equiv[i].split(tokSep);
-            int nIn = Integer.parseInt(pareja[0].trim())-1;
-            int nOut = Integer.parseInt(pareja[1].trim())-1;
-            aEquiv[nOut] = nIn;
-        }
+            for (int i=0; i<nEquiv; i++){
+                String[] pareja = equiv[i].split(tokSep);
+                int nIn = Integer.parseInt(pareja[0].trim())-1;
+                int nOut = Integer.parseInt(pareja[1].trim())-1;
+                aEquiv[nOut] = nIn;
+            }
         } catch (NumberFormatException e) {
             LOG.error("EquivIO.init NumberFormatException: ", e);
             throw new BatchException("EquivIO.init NumberFormatException");
@@ -73,6 +73,13 @@ public class EquivIO {
         return nEquiv;
     }
 
+    public String toText() {
+        String str = "";
+        for (int i=0; i<nEquiv; i++){
+            str += ( i==0 ? "" : "," ) + (i+1) + "-" + (aEquiv[i]+1) ;
+        }
+        return str;
+    }
     
     
 }

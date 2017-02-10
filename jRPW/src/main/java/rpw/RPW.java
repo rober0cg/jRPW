@@ -1,6 +1,11 @@
-package sr.jRPW;
+package rpw;
 
 import org.apache.log4j.Logger;
+
+import rpw.common.*;
+import rpw.processor.*;
+import rpw.reader.*;
+import rpw.writer.*;
 
 import java.io.InputStream;
 import java.io.FileInputStream;
@@ -8,21 +13,24 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import sr.jRPW.common.*;
-import sr.jRPW.processor.*;
-import sr.jRPW.reader.*;
-import sr.jRPW.writer.*;
-
 public final class RPW {
     private static final Logger LOG = Logger.getLogger(RPW.class);
 
     // Tipos de Lectura, Proceso y Escritura y sus nombres
-    private static String iType=null, oType=null, pType=null;
-    private static String[] pName=null, iName=null, oName=null;
+    private static String iType=null;
+    private static String oType=null;
+    private static String pType=null;
+    private static String[] pName=null;
+    private static String[] iName=null;
+    private static String[] oName=null;
 
     // Campos de entrada y salida, y sus equivalencias
-    private static String[] riFlds=null, piFlds=null, poFlds=null, woFlds=null;
-    private static String[] ripEquiv=null, powEquiv=null;
+    private static String[] riFlds=null;
+    private static String[] piFlds=null;
+    private static String[] poFlds=null;
+    private static String[] woFlds=null;
+    private static String[] ripEquiv=null;
+    private static String[] powEquiv=null;
 
     // Objetos para la Lectura, Proceso, Escritura y Equivalencia de datos entre pasos
     private static BatchReader ir = null;
@@ -80,11 +88,6 @@ public final class RPW {
             LOG.fatal("RPW.main: ERROR BUCLE RPW. ABORT", e );
         }
 
-        riVals = null;
-        piVals = null;
-        poVals = null;
-        woVals = null;
-
         cerrarObjetos();
 
         LOG.trace("RPW.main: Bye!");
@@ -95,23 +98,17 @@ public final class RPW {
     private static void cargaParametros(String sProps) throws BatchException {
         LOG.trace("RPW.cargaParametros");
 
-        try {
+        try ( InputStream fProps = new FileInputStream(sProps)){
             // cargamos el archivo de propiedades
-            InputStream fProps = new FileInputStream(sProps);
             Properties pProps = new Properties();
             pProps.load(fProps);
-
+            fProps.close();
+            
             String sDefCommaSep="\\s*,\\s*";
             cargaParametrosReader(pProps,sDefCommaSep);
             cargaParametrosProcessor(pProps,sDefCommaSep);
             cargaParametrosWriter(pProps,sDefCommaSep);
             cargaParametrosEquivalencia(pProps,sDefCommaSep);
-
-            pProps = null ;
-            if (fProps != null) {
-                fProps.close();
-                fProps = null;
-            }
 
             // validaciones
             int nError=0;
@@ -279,11 +276,6 @@ public final class RPW {
         } catch (BatchException e) {
             LOG.fatal("RPW.main: ERROR SALIENDO. ABORT", e );
         }
-        ir = null;
-        pr = null;
-        ow = null;
-        eqRP = null;
-        eqPW = null;
         return;
     }
 

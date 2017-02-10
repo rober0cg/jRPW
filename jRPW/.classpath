@@ -23,7 +23,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/opt/lib/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="D:/opt/NAv5.0.3_x64/classes"/>
 	<classpathentry kind="lib" path="D:/opt/lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="D:/opt/lib/sqlite-jdbc-3.7.2.jar"/>
 	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
@@ -31,5 +30,13 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/opt/lib/mysql-connector-java-5.1.40-bin.jar"/>
+	<classpathentry kind="lib" path="D:/opt/lib/postgresql-9.4.1212.jar"/>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/opt/lib/na-5.0.3_x64.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

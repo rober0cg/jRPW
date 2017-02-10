@@ -1,8 +1,8 @@
-package sr.jRPW.processor;
+package rpw.processor;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
+import rpw.common.BatchException;
 
 public class TESTProcessor implements BatchProcessor {
     private static final Logger LOG = Logger.getLogger(TESTProcessor.class);

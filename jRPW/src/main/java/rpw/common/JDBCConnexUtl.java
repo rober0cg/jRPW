@@ -1,6 +1,8 @@
-package sr.jRPW.common;
+package rpw.common;
 
 import org.apache.log4j.Logger;
+
+import rpw.common.BatchException;
 
 import java.util.*;
 
@@ -9,9 +11,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
-import sr.jRPW.common.BatchException;
-
-/*
+/**
  * Clase para implementar la reutilización de la conexión cuando tiene los mismos parámetros.
  *   sJdbcDriver
  *   sdbConnection
@@ -22,14 +22,17 @@ public class JDBCConnexUtl {
     private static final Logger LOG=Logger.getLogger(JDBCConnexUtl.class);
 
     String sJdbcDrv=null;
-    String sdbUrl=null, sdbUsr=null, sdbPwd=null;
+    String sdbUrl=null;
+    String sdbUsr=null;
+    String sdbPwd=null;
     private Connection dbConn=null;
 
-    // ArrayList estáticos para gestion reutilización driver y conexion
-    private static List<String> aJdbcDrivers = new ArrayList<String>();
-    private static List<ConnexArgs> aConnexArgs = new ArrayList<ConnexArgs>();
+    // ArrayList estáticos para gestión reutilización driver y conexion
+    private static List<String> aJdbcDrivers = new ArrayList<>();
+    private static List<ConnexArgs> aConnexArgs = new ArrayList<>();
 
-    public JDBCConnexUtl() {
+    public JDBCConnexUtl(String drv, String url, String usr, String pwd) throws BatchException {
+        open(drv, url, usr, pwd);
     }
     
     public void open ( String drv, String url, String usr, String pwd ) throws BatchException {
@@ -39,7 +42,7 @@ public class JDBCConnexUtl {
     }
 
     // cargar el driver de DB adecuado
-    public int iniDriver ( String drv ) throws BatchException {
+    private int iniDriver ( String drv ) throws BatchException {
         LOG.trace("JDBCConnex.iniDriver DRIVER: "+drv);
         sJdbcDrv=drv;
         // buscar sJdbcDriver en aJdbcDrivers
@@ -61,7 +64,7 @@ public class JDBCConnexUtl {
         return 0;
     }
 
-    public int iniConnex ( String url, String usr, String pwd ) throws BatchException {
+    private int iniConnex ( String url, String usr, String pwd ) throws BatchException {
         LOG.trace("JDBCConnex.iniConnex");
         sdbUrl=url;
         sdbUsr=usr;
@@ -70,13 +73,13 @@ public class JDBCConnexUtl {
         // buscar sdbConnection y sdbUser en aConnexArgs
         for ( ConnexArgs cArgs : aConnexArgs ) {
             if ( sdbUrl.equals(cArgs.getUrl()) && sdbUsr.equals(cArgs.getUsr())) { // encontrado.
-                LOG.trace("JDBCConnex.iniConnex REUSING CONNEX: "+sdbUrl+","+sdbUsr+","+cArgs.getNUse());
-                dbConn=reuseConnex(cArgs);
+                LOG.trace("JDBCConnex.iniConnex YA CONECTADO: "+sdbUrl+","+sdbUsr+","+cArgs.getNUse());
+                dbConn = reuseConnex(cArgs);
                 return 0;
             }
         }
         // conectar a la DB y guardar en la lista
-        LOG.trace("JDBCConnex.iniConnex GET NEW CONNEX: "+sdbUrl+","+sdbUsr);
+        LOG.trace("JDBCConnex.iniConnex CONECTANDO: "+sdbUrl+","+sdbUsr);
         dbConn = createConnex(sdbUrl, sdbUsr, sdbPwd);
         return 0;
     }
@@ -97,30 +100,31 @@ public class JDBCConnexUtl {
         return c;
     }
 
+    public String toText(){
+        String str;
+        str = sJdbcDrv+";"+sdbUrl+";"+sdbUsr+";"+sdbPwd;
+        return str;
+    }
 
     public void close() throws BatchException {
         this.endConnex();
     }
 
-    public int endConnex() throws BatchException {
+    private int endConnex() throws BatchException {
         LOG.trace("JDBCConnex.endConnex CONNEX: "+sdbUrl+","+sdbUsr);
         // buscar sdbConnection y sdbUser en aConnexArgs
         for ( ConnexArgs cArgs : aConnexArgs ) {
             if ( sdbUrl.equals(cArgs.getUrl()) && sdbUsr.equals(cArgs.getUsr())) { // encontrado.
                 if ( cArgs.decNUse()>0 ) { // si tras decrementar no hay más, cerrar conexion
-                    LOG.trace("JDBCConnex.endConnex REUSED CONNEX: "+sdbUrl+","+sdbUsr+","+cArgs.getNUse());
+                    LOG.trace("JDBCConnex.endConnex DEJANDO DE USAR: "+sdbUrl+","+sdbUsr+","+cArgs.getNUse());
                 }
                 else {
-                    LOG.trace("JDBCConnex.endConnex REMOVING CONNEX: "+sdbUrl+","+sdbUsr+","+cArgs.getNUse());
+                    LOG.trace("JDBCConnex.endConnex DESCONECTANDO: "+sdbUrl+","+sdbUsr+","+cArgs.getNUse());
                     removeConnex(cArgs);
                 }
                 break;
             }
         }
-        sJdbcDrv=null;
-        sdbUrl=null;
-        sdbUsr=null;
-        sdbPwd=null;
         return 0;
     }
     private void removeConnex ( ConnexArgs cArgs ) throws BatchException {
@@ -179,7 +183,8 @@ public class JDBCConnexUtl {
     }
     
     class ConnexArgs {
-        String sUrl=null, sUsr=null;
+        String sUrl=null;
+        String sUsr=null;
         Connection dbConn=null;
         int nUse=0;
         ConnexArgs( String url, String usr, Connection con) {

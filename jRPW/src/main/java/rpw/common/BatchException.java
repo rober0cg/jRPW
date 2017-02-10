@@ -1,7 +1,7 @@
 /*
  * Gestion de Excepciones de la aplicacion para subirlas unificadas al programa principal
  */
-package sr.jRPW.common;
+package rpw.common;
 
 /*
  * @author roberto

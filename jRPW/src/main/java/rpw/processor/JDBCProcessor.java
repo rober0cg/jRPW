@@ -1,13 +1,13 @@
-package sr.jRPW.processor;
+package rpw.processor;
 
 import org.apache.log4j.Logger;
+
+import rpw.common.BatchException;
+import rpw.common.JDBCCommon;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import sr.jRPW.common.BatchException;
-import sr.jRPW.common.JDBCCommon;
 
 public class JDBCProcessor extends JDBCCommon implements BatchProcessor {
     private static final Logger LOG=Logger.getLogger(JDBCProcessor.class);
@@ -21,6 +21,7 @@ public class JDBCProcessor extends JDBCCommon implements BatchProcessor {
     int nProc = 0 ;
 
     public JDBCProcessor(String[] args, String[] ifs, String[] ofs) throws BatchException {
+        super(args[0], args[1], args[2], args[3]);
         init(args, ifs, ofs);
     }
 
@@ -30,7 +31,6 @@ public class JDBCProcessor extends JDBCCommon implements BatchProcessor {
     @Override
     public int init(String[] args, String[] ifs, String[] ofs) throws BatchException {
         LOG.debug("JDBCPRocessor.initBP");
-        super.open(args[0], args[1], args[2], args[3]);
         iFld = ifs;
         oFld = ofs;
         sSQL = args[4];
@@ -64,7 +64,7 @@ public class JDBCProcessor extends JDBCCommon implements BatchProcessor {
             nProc++;
             
         } catch ( SQLException e ){
-            LOG.error("JDBCProcessor.doBP executeQuery SQLException = "+sSQL);
+            LOG.error("JDBCProcessor.doBP executeQuery SQLException = "+sSQL+" exception = "+e);
         }
 
         return 0;
@@ -74,9 +74,6 @@ public class JDBCProcessor extends JDBCCommon implements BatchProcessor {
     public int end() throws BatchException {
         LOG.debug("JDBCPRocessor.closeBP");
         super.close();
-        iFld=null;
-        oFld=null;
-        nProc=0;
         return 0;
     }
 

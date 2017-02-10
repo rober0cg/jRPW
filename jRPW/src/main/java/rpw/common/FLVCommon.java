@@ -1,8 +1,8 @@
-package sr.jRPW.common;
+package rpw.common;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
+import rpw.common.BatchException;
 
 
 public class FLVCommon {

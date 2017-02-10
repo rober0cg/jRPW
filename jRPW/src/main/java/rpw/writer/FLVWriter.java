@@ -1,9 +1,9 @@
-package sr.jRPW.writer;
+package rpw.writer;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
-import sr.jRPW.common.FLVCommon;
+import rpw.common.BatchException;
+import rpw.common.FLVCommon;
 
 
 /* 
@@ -66,12 +66,14 @@ public class FLVWriter extends FILEWriter implements BatchWriter {
         return str;
     }
     private String fixedStringFLV(String val, int lng){
-        String flv="";
+        String flv;
         String fmt="%-"+lng+"."+lng+"s"; // %-12.12s
-        if ( val!=null )
+        if ( val!=null ) {
             flv=String.format(fmt, val);
-        else
+        }
+        else {
             flv=String.format(fmt, "");
+        }
         return flv;
     }
 

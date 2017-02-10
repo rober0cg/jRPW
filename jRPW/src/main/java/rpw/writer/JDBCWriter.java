@@ -1,12 +1,12 @@
 /**
  * 
  */
-package sr.jRPW.writer;
+package rpw.writer;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
-import sr.jRPW.common.JDBCCommon;
+import rpw.common.BatchException;
+import rpw.common.JDBCCommon;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,6 +28,7 @@ public class JDBCWriter extends JDBCCommon implements BatchWriter {
     int bn=0; // BlqNum
 
     public JDBCWriter(String[] args, String[] flds) throws BatchException {
+        super(args[0], args[1], args[2], args[3]);
         open(args,flds);
     }
 
@@ -37,8 +38,6 @@ public class JDBCWriter extends JDBCCommon implements BatchWriter {
     @Override
     public int open(String[] args, String[] flds) throws BatchException {
         LOG.trace("JDBCWriter.openBW");
-
-        super.open(args[0], args[1], args[2], args[3]);
 
         // preparar la query
         sSQL=args[4];

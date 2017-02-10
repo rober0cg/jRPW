@@ -1,12 +1,12 @@
-package sr.jRPW.writer;
-
-import sr.jRPW.common.BatchException;
+package rpw.writer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+
+import rpw.common.BatchException;
 
 public class FILEWriter {
     private static final Logger LOG=Logger.getLogger(FILEWriter.class);
@@ -16,6 +16,7 @@ public class FILEWriter {
     BufferedWriter bw=null;
 
     public FILEWriter() {
+        // no se usa
     }
     public FILEWriter(String fn) throws BatchException {
         open(fn);
@@ -64,11 +65,9 @@ public class FILEWriter {
             if ( bw!=null) {
                 bw.flush();
                 bw.close();
-                bw=null;
             }
             if ( fw!=null) {
                 fw.close();
-                fw=null;
             }
         } catch (IOException e) {
             LOG.error("FILEWriter.close: ", e);

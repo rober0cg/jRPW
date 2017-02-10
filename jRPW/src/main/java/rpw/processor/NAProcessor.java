@@ -1,14 +1,14 @@
-package sr.jRPW.processor;
+package rpw.processor;
 
 
 import org.apache.log4j.Logger;
-
-import sr.jRPW.common.BatchException;
 
 import com.telefonica.na.NACampo;
 import com.telefonica.na.NAEntorno;
 import com.telefonica.na.NAServicio;
 import com.telefonica.na.NAWRException;
+
+import rpw.common.BatchException;
 
 
 public class NAProcessor implements BatchProcessor {
@@ -18,8 +18,10 @@ public class NAProcessor implements BatchProcessor {
     NAServicio naSrv = null;
 
     String svNA = null ;
-    String[] iFld = null ; int[] iIdx ;
-    String[] oFld = null ; int[] oIdx ;
+    String[] iFld = null ;
+    int[] iIdx ;
+    String[] oFld = null ;
+    int[] oIdx ;
     int nProc = 0 ;
 
     public NAProcessor (String[] args, String[] ifs, String[] ofs) throws BatchException {

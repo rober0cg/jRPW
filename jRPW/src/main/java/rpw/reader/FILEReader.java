@@ -1,8 +1,8 @@
-package sr.jRPW.reader;
+package rpw.reader;
 
 import org.apache.log4j.Logger;
 
-import sr.jRPW.common.BatchException;
+import rpw.common.BatchException;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -17,6 +17,7 @@ public class FILEReader {
     BufferedReader br=null;
 
     public FILEReader() {
+        // no se usa
     }
 
     public FILEReader(String fn) throws BatchException {
@@ -52,11 +53,9 @@ public class FILEReader {
         try {
             if ( br!=null) {
                 br.close();
-                br=null;
             }
             if ( fr!=null) {
                 fr.close();
-                fr=null;
             }
         } catch (IOException e) {
             LOG.error("FILEReader.close: ", e);
